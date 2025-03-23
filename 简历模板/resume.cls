@@ -1,5 +1,5 @@
 % 作者: 二两拉菲多加醋
-% 链接: 
+% 链接: https://github.com/ZhouMuzhi/Sharement/edit/main/%E7%AE%80%E5%8E%86%E6%A8%A1%E6%9D%BF
 
 
 \NeedsTeXFormat{LaTeX2e}
