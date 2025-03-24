@@ -1,5 +1,5 @@
 % 作者: 二两拉菲多加醋
-% 链接: https://github.com/ZhouMuzhi/Sharement/edit/main/%E7%AE%80%E5%8E%86%E6%A8%A1%E6%9D%BF
+% 链接: https://github.com/ZhouMuzhi/Sharement/edit/main/一个不太简约的简历模板
 
 
 \NeedsTeXFormat{LaTeX2e}
@@ -11,8 +11,15 @@
 % 支持 UTF-8 编码和中文字体
 \RequirePackage[UTF8]{ctex}
 
-% % 设置全局字体为楷书
-\setCJKmainfont{KaiTi} % 设置中文字体
+% 设置全局字体为楷书
+\usepackage{xeCJK}
+
+\usepackage{xpatch} % 因为自定义了字体, 所以在这里解决一下warning的问题
+\ExplSyntaxOn
+    \xpatchcmd\__xeCJK_check_family:n{\__xeCJK_warning:nxx}{\__xeCJK_info:nxx}{}{}
+\ExplSyntaxOff
+
+\setCJKmainfont[BoldFont={KaiTi}]{KaiTi} % 设置中文字体,BoldFont为修正字体, 因为KaiTi没有加粗字体
 \setmainfont{Times New Roman} % 设置英文字体
 
 % 页面布局设置
@@ -38,7 +45,7 @@
 \AtBeginDocument{%
     \begin{tikzpicture}[remember picture, overlay]
         % 色带
-        \fill[color=ThemeColor] (current page.north west) rectangle ($(current page.north east) + (0,-1cm)$);
+        \fill[color=ThemeColor] (current page.north west) rectangle ($(current page.north east) + (1cm,-1cm)$);
         
         % 原点位置
         \coordinate (spawn) at ($(current page.north west) + (2.5cm,-1cm)$);
@@ -92,18 +99,41 @@
 \setlength{\parskip}{6pt}   % 段落间距
 
 % 列表格式设置
-\RequirePackage{enumitem}
-\setlist[itemize]{noitemsep, topsep=0pt} % 去除列表项间距
+\usepackage{enumitem}
+\usepackage{pifont}
+\setlist[itemize,1]{
+    leftmargin=*,     
+    itemsep=0pt,      
+    parsep=0pt,
+    label=\color{ThemeColor}{\ding{114}}
+}
 
-% 超链接设置
+% 次级列表
+\setlist[itemize,2]{
+    leftmargin=1em,
+    itemsep=0pt,
+    label=\color{ThemeColor}{\ding{226}}
+}
+
+% 链接设置
 \RequirePackage{hyperref}
+
+\newcommand{\linkcolor}{black}
 \hypersetup{
 colorlinks=true,
-linkcolor=black,
-citecolor=black,
-urlcolor=black,
-anchorcolor=black
+linkcolor=\linkcolor,
+citecolor=\linkcolor,
+urlcolor=\linkcolor,
+anchorcolor=\linkcolor
 }
+\RequirePackage{fontawesome}
+\let\oldhref\href
+\renewcommand{\href}[2]{%
+    \oldhref{#1}{#2\,\normalsize\textcolor{ThemeColor}{\faExternalLink}}
+}
+
+
+
 
 \renewcommand{\section}[1]{%
     \noindent
@@ -143,15 +173,15 @@ anchorcolor=black
 % 一个用的比较多的环境
 \newcommand{\tricol}[3]{%
     \noindent % 取消段落缩进
-    \begin{minipage}[t]{0.33\textwidth} 
+    \begin{minipage}[tr]{0.3\textwidth} 
         \raggedright #1
     \end{minipage}%
     \hfill 
-    \begin{minipage}[t]{0.33\textwidth} 
+    \begin{minipage}[tr]{0.3\textwidth} 
         \center #2
     \end{minipage}%
     \hfill 
-    \begin{minipage}[t]{0.33\textwidth} 
+    \begin{minipage}[tr]{0.3\textwidth} 
         \raggedleft #3
     \end{minipage}
     \par 
@@ -165,7 +195,6 @@ anchorcolor=black
 }
 
 % 页脚
-
 \AtBeginDocument{%
     \pagestyle{empty}
     \begin{tikzpicture}[remember picture, overlay]
@@ -181,7 +210,7 @@ anchorcolor=black
         };
         
         % 色带
-        \fill[color=ThemeColor] (current page.south east) rectangle ($(current page.south west) + (0,0.5cm)$);
+        \fill[color=ThemeColor] ($(current page.south east) + (1cm,0cm)$) rectangle ($(current page.south west) + (-1cm,0.5cm)$);
         
         
     \end{tikzpicture}
